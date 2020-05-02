@@ -6,6 +6,9 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>scope</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-icons/3.0.1/iconfont/material-icons.min.css">
     <link rel="stylesheet" href="css/style.css">
@@ -13,50 +16,20 @@
 <body style="margin: 0">
     <div class="container-fluid" id="container">
         <div class="header">
-            <div class="top">
+            <div class="top mb-3">
                 <div class="logo theme-color-3">Scope</div>
                 <div class="word__info">
-                    <div class="my__card">
-                        <div class="box">
-                            <div class="percent">
-                                <svg class="svg">
-                                    <circle cx="70" cy="70" r="70"></circle>
-                                    <circle cx="70" cy="70" r="70"></circle>
-                                </svg>
-                                <div class="number">
-                                    <h2>90 <span>%</span></h2>
-                                </div>
-                            </div>
-                            <h2 class="text">HTML</h2>
-                        </div>
+                    <div class="nb__case theme-color-1">
+                        {{cases}}
+                        <div class="title">TOTAL CASE</div>
                     </div>
-                    <div class="my__card">
-                        <div class="box">
-                            <div class="percent">
-                                <svg class="svg">
-                                    <circle cx="70" cy="70" r="70"></circle>
-                                    <circle cx="70" cy="70" r="70"></circle>
-                                </svg>
-                                <div class="number">
-                                    <h2>85 <span>%</span></h2>
-                                </div>
-                            </div>
-                            <h2 class="text">HTML</h2>
-                        </div>
+                    <div class="nb__sub">
+                        {{death}}
+                        <div class="title">DEATHS</div>
                     </div>
-                    <div class="my__card">
-                        <div class="box">
-                            <div class="percent">
-                                <svg class="svg">
-                                    <circle cx="70" cy="70" r="70"></circle>
-                                    <circle cx="70" cy="70" r="70"></circle>
-                                </svg>
-                                <div class="number">
-                                    <h2>35 <span>%</span></h2>
-                                </div>
-                            </div>
-                            <h2 class="text">HTML</h2>
-                        </div>
+                    <div class="nb__sub">
+                        {{recored}}
+                        <div class="title">RECOVERED</div>
                     </div>
                 </div>
             </div>
@@ -67,9 +40,62 @@
                 </div>
             </div>
         </div>
+        <div class="content">
+            <div class="country">
+                <div v-for="item in all" class="card item js-marker" style="width: 18rem;" :data-lat="item.countryInfo.lat" :data-long="item.countryInfo.long" :data-case="item.cases" :data-recovered="item.recovered">
+                    <!--                <img :src="item.countryInfo.flag" class="card-img-top" alt="...">-->
+                    <div class="card__img" :style="{'background-image': 'url('+ item.countryInfo.flag +')'}"></div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{item.country}}</h5>
+                        <div class="infos">
+                            <div class="left">
+                                <div class="info">
+                                    {{item.cases}}
+                                    <div class="total">Total case</div>
+                                </div>
+                                <div class="info">
+                                    {{item.active}}
+                                    <div class="total">active case</div>
+                                </div>
+                                <div class="info">
+                                    {{item.deaths}}
+                                    <div class="total">Death</div>
+                                </div>
+                                <div class="info">
+                                    {{item.recovered}}
+                                    <div class="total">Recovered</div>
+                                </div>
+                                <div class="info">
+                                    {{item.critical}}
+                                    <div class="total">critical</div>
+                                </div>
+                            </div>
+                            <div class="right">
+                                <v-container>
+                                    <v-progress-circular
+                                            :value="getPourcent(item.cases, item.recovered)"
+                                            style="text-align: center"
+                                            :style="{'color' : getColor(getPourcent(item.cases, item.recovered))}"
+                                            :size="100"
+                                    >{{getPourcent(item.cases, item.recovered)}} <span>%</span></v-progress-circular>
+                                    <div class="total" style="text-align: center; margin-top: 16px;margin-right: 23px;">Taux de guérison</div>
+                                </v-container>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="map" id="map">
+jvhjbj
+            </div>
+        </div>
     </div>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
     <script src="js/vue.js"></script>
 </body>
 </html>
